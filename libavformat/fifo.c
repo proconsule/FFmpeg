@@ -42,7 +42,7 @@
 	OSSetAtomic64(a,b)
 
 #define __atomic_fetch_sub(a,b,c)  \
-	OSOrAtomic64(a,b)
+	OSOrAtomic64(a,b^((1<<32)-1))
 
 #define __atomic_store(a,b,c)  \
 	OSSetAtomic64(a,b)

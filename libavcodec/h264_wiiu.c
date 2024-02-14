@@ -147,9 +147,8 @@ static int h264_wiiu_decode_frame(struct AVCodecContext *avctx, struct AVFrame *
         av_log(avctx, AV_LOG_ERROR, "h264_wiiu: Unable to allocate buffer");
         return AVERROR(ENOMEM);
     }
-	
-	
 
+	
     res = H264DECExecute(decoder, framebuffer);
     if (res != 0xE4)
     {
@@ -166,12 +165,14 @@ static int h264_wiiu_decode_frame(struct AVCodecContext *avctx, struct AVFrame *
 	avframe->data[1] = ((uint8_t*) framebuffer) + (avctx->height * pitch);
 	avframe->format = AV_PIX_FMT_NV12;
 	*/
-	
+	pitch = (avctx->width + (256 - 1)) & ~(256 - 1);
     // Y
     pointers[0] = (uint8_t*) framebuffer;
     // U/V
     pointers[1] = ((uint8_t*) framebuffer) + (avctx->height * pitch);
 	linesize[0] = linesize[1] = pitch;
+
+	avframe->format = AV_PIX_FMT_NV12;
 
 	/*
 	avframe->data[0] =  framebuffer;
@@ -211,7 +212,7 @@ const FFCodec ff_h264_wiiu_decoder = {
     .close                 = h264_wiiu_decode_close,
     FF_CODEC_DECODE_CB(h264_wiiu_decode_frame),
 	.bsfs           	   = "h264_mp4toannexb",
-	//.p.capabilities        = AV_CODEC_CAP_DR1|AV_CODEC_CAP_DELAY | AV_CODEC_CAP_HARDWARE,
+	.p.capabilities        = AV_CODEC_CAP_DR1,
     
     //.caps_internal         = FF_CODEC_CAP_EXPORTS_CROPPING |
     //                         FF_CODEC_CAP_ALLOCATE_PROGRESS | FF_CODEC_CAP_INIT_CLEANUP,
