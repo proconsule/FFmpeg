@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# original config script by rw-r-r-0644
+# modified by GaryOderNichts
+
+export WUT_ROOT=/opt/devkitpro/wut/
+export PATH=$DEVKITPPC/bin:$PATH
+export ARCH="-mcpu=750 -meabi -mhard-float"
+export CFLAGS="-fomit-frame-pointer -ffast-math -fno-math-errno -funsafe-math-optimizations -ffinite-math-only -fno-trapping-math -O3 -Ofast"
+
+./configure --prefix=$DEVKITPRO/portlibs/ppc/ \
+--enable-cross-compile \
+--cross-prefix=$DEVKITPPC/bin/powerpc-eabi- \
+--disable-shared \
+--disable-runtime-cpudetect \
+--disable-programs \
+--disable-doc \
+--enable-protocol=file \
+--enable-static \
+--disable-debug \
+--arch=ppc \
+--cpu=750 \
+--target-os=wiiu \
+--extra-cflags=" -D__WIIU__ -D_GNU_SOURCE $CFLAGS $ARCH -I$WUT_ROOT/include" \
+--extra-cxxflags=" -D__WIIU__ -D_GNU_SOURCE $CFLAGS -fno-rtti -fno-exceptions -std=gnu++23 $ARCH" \
+--extra-ldflags=" -Wl,-q -Wl,-z,nocopyreloc  -L$WUT_ROOT/lib -lwut" \
+--disable-bzlib \
+--disable-iconv \
+--disable-lzma \
+--disable-securetransport \
+--disable-xlib \
+--disable-zlib
