@@ -34,6 +34,20 @@
 #define FIFO_DEFAULT_MAX_RECOVERY_ATTEMPTS   0
 #define FIFO_DEFAULT_RECOVERY_WAIT_TIME_USEC 5000000 // 5 seconds
 
+
+#define __atomic_fetch_add(a,b,c)  \
+	OSAddAtomic64(a,b)
+
+#define __atomic_load(a,b,c)  \
+	OSSetAtomic64(a,b)
+
+#define __atomic_fetch_sub(a,b,c)  \
+	OSOrAtomic64(a,b)
+
+#define __atomic_store(a,b,c)  \
+	OSSetAtomic64(a,b)
+
+
 typedef struct FifoContext {
     const AVClass *class;
     AVFormatContext *avf;

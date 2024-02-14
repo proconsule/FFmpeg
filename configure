@@ -132,6 +132,7 @@ Component options:
   --disable-swscale        disable libswscale build
   --disable-postproc       disable libpostproc build
   --disable-avfilter       disable libavfilter build
+  --disable-wiiuthreads     disable Win32 threads
   --disable-pthreads       disable pthreads [autodetect]
   --disable-w32threads     disable Win32 threads [autodetect]
   --disable-os2threads     disable OS/2 threads [autodetect]
@@ -2053,6 +2054,7 @@ THREADS_LIST="
     pthreads
     os2threads
     w32threads
+	wiiuthreads
 "
 
 ATOMICS_LIST="
@@ -5846,6 +5848,9 @@ case $target_os in
         ;;
     minix)
         ;;
+	wiiu)
+        network_extralibs="-lwut"
+        ;;
     none)
         ;;
     *)
@@ -6664,6 +6669,11 @@ if ! disabled w32threads && ! enabled pthreads; then
         check_func_headers "windows.h" CreateThread &&
             enable w32threads || disable w32threads
     fi
+fi
+
+if ! disabled wiiuthreads && ! enabled pthreads; then
+	enable wiiuthreads 
+   
 fi
 
 # check for some common methods of building with pthread support

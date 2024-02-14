@@ -30,7 +30,7 @@
 
 #include "error.h"
 
-#if HAVE_PTHREADS || HAVE_W32THREADS || HAVE_OS2THREADS
+#if HAVE_PTHREADS || HAVE_W32THREADS || HAVE_OS2THREADS || HAVE_WIIUTHREADS
 
 #if HAVE_PTHREADS
 #include <pthread.h>
@@ -151,6 +151,8 @@ static inline int strict_pthread_once(pthread_once_t *once_control, void (*init_
 
 #elif HAVE_OS2THREADS
 #include "compat/os2threads.h"
+#elif HAVE_WIIUTHREADS
+#include "compat/wiiupthreads.h"
 #else
 #include "compat/w32pthreads.h"
 #endif
